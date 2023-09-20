@@ -27,6 +27,21 @@ export class App extends Component {
     filter: '',
   };
 
+  componentDidMount() {
+    console.log();
+    const localContacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(localContacts);
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   addContact = ({ name, number }) => {
     const contacts = this.state.contacts;
     // const form = evt.currentTarget;
@@ -70,21 +85,6 @@ export class App extends Component {
     const { contacts, filter } = this.state;
     return contacts.filter(({ name }) => name.toLowerCase().includes(filter));
   };
-
-  componentDidMount() {
-    console.log();
-    const localContacts = localStorage.getItem('contacts');
-    const parsedContacts = JSON.parse(localContacts);
-    if (parsedContacts) {
-      this.setState({ contacts: parsedContacts });
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.contacts !== prevState.contacts) {
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-    }
-  }
 
   render() {
     const { contacts, filter } = this.state;
